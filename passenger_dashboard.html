@@ -429,8 +429,8 @@ async function searchFlights() {
         destination:airports!routes_destination_id_fkey(iata_code, city)
       )
     `)
-    .in('flight_status', ['scheduled','boarding'])
-    .gt('scheduled_departure', new Date().toISOString())
+    .in('flight_status', ['scheduled','boarding','in_air'])
+    .or('scheduled_departure.gt.' + new Date().toISOString() + ',flight_status.eq.in_air')
     .order('scheduled_departure');
 
   if (originId) query = query.eq('route.origin_id', originId);
